@@ -20,4 +20,4 @@ To run, just follow the steps:
 ### Feel free to fork and improve as you wish
 #### All CRUD operations are working
 
-# * NOTE: THE 'DELETE' AND 'UPDATE' OPERATIONS ARE DESTRUCTIVE, DON'T TRY THEM IF YOU DON'T WANT TO MESS WITH YOUR CALENDAR SCHEDULES.
+# * NOTE: The 'DELETE' and 'UPDATE' operations ARE DESTRUCTIVE, don't try them if you don't want to MESS WITH YOUR CALENDAR schedules.
