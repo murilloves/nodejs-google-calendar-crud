@@ -13,7 +13,11 @@ To run, just follow the steps:
 ## 3 - Run the app
 `$ node .`
 
--------- That's it, just follow the instructions to enable your credentials, your token (by oauth2 from google) --------
+## That's it!
+
+-------- Now just follow the instructions to enable your credentials, your token (by oauth2 from google), and modify your Google calendar --------
 
 ### Feel free to fork and improve as you wish
 #### All CRUD operations are working
+
+# * NOTE: THE 'DELETE' AND 'UPDATE' OPERATIONS ARE DESTRUCTIVE, DON'T TRY THEM IF YOU DON'T WANT TO MESS WITH YOUR CALENDAR SCHEDULES.
