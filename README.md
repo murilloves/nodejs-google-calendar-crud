@@ -15,7 +15,7 @@ To run, just follow the steps:
 
 ## That's it!
 
--------- Now just follow the instructions to enable your credentials, your token (by oauth2 from google), and modify your Google calendar --------
+-------- Now just follow the instructions to enable your token (by oauth2 from google), and modify your Google calendar --------
 
 ### Feel free to fork and improve as you wish
 #### All CRUD operations are working
