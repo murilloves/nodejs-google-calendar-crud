@@ -5,6 +5,9 @@ const axios = require('axios')
 
 const stdin = process.openStdin();
 
+let tomorrow = new Date()
+tomorrow.setDate(tomorrow.getDate() + 1)
+
 /*
 stdin.addListener("data", function(d) {
   // note:  d is an object, and when converted to a string it will
@@ -31,7 +34,7 @@ let access_token;
 fs.readFile('credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Calendar API.
-  authorize(JSON.parse(content), getActionFromUser, listEvents, deleteNextEvent);
+  authorize(JSON.parse(content), getActionFromUser);
 });
 
 /**
@@ -93,9 +96,9 @@ function getCalendar(auth) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listEvents(auth, numberOfEvents = 10) {
+function listEvents(auth, numberOfEvents = 15) {
   const calendar = getCalendar(auth)
-  const isoDate = (new Date(2018, 5, 26)).toISOString()
+  const isoDate = (new Date(1970, 1, 1)).toISOString()
 
   calendar.events.list(
     paramsEventsList(isoDate, numberOfEvents),
@@ -127,19 +130,20 @@ function paramsEventsList(fromIsoDate, numberOfEvents) {
 }
 
 function getActionFromUser(auth) {
-  console.log('1 - List events')
-  console.log('2 - Insert event')
-  console.log('3 - Update event')
-  console.log('4 - Delete event')
-  console.log('5 - Revoke token')
-  console.log('0 - Exit')
+  const numberOfListedEvents = 15
+  console.log(`1 - Lists your ${numberOfListedEvents} first Google calendar events`)
+  console.log('2 - Inserts new event for tomorrow')
+  console.log('3 - Update the first event to current day')
+  console.log('4 - Delete first event')
+  console.log('5 - Revoke your token')
+  console.log('\n0 - Exit')
   console.log('\n')
   console.log('Choose an action:')
 
   stdin.addListener("data", function(d) {
     switch(Number(d)) {
       case 1:
-        listEvents(auth)
+        listEvents(auth, numberOfListedEvents)
         break
       case 2:
         createEvent(auth)
@@ -148,7 +152,7 @@ function getActionFromUser(auth) {
         updateEvent(auth)
         break
       case 4:
-        deleteNextEvent(auth)
+        deleteFirstEvent(auth)
         break
       case 5:
         revokeToken(auth)
@@ -172,9 +176,9 @@ function getActionFromUser(auth) {
 //   )
 // }
 
-function deleteNextEvent(auth) {
+function deleteFirstEvent(auth) {
   const calendar = getCalendar(auth)
-  const isoDate = (new Date(2018, 5, 26)).toISOString()
+  const isoDate = (new Date(1970, 1, 1)).toISOString()
 
   calendar.events.list(
     paramsEventsList(isoDate, 1),
@@ -201,14 +205,17 @@ function createEvent(auth) {
   const calendar = google.calendar({version: 'v3', auth})
   // console.log(calendar)
 
+  let tomorrowOneHourLater = new Date(tomorrow.getTime())
+  tomorrowOneHourLater.setHours(tomorrow.getHours() +1)
+
   let event = {
-    'summary': 'Video Conferência',
-    'description': '',
+    'summary': 'Sample Event happening Tomorrow!',
+    'description': 'This is your sample event created from Murilloves\' Google Calendar NODEJS API',
     'start': {
-      'dateTime': '2019-01-14T21:30:00.192Z',
+      'dateTime': tomorrow.toISOString(),
     },
     'end': {
-      'dateTime': '2019-01-14T23:00:00.192Z',
+      'dateTime': tomorrowOneHourLater.toISOString(),
     },
     'attendees': [
       {'email': 'lpage@example.com'},
@@ -247,7 +254,7 @@ function updateEvent(auth) {
   let event = {};
 
   calendar.events.list(
-    paramsEventsList((new Date(1970, 1, 1)).toISOString(), 10),
+    paramsEventsList((new Date(1970, 1, 1)).toISOString(), 1),
     (err, res) => {
       if (err) console.log(err)
 
@@ -256,9 +263,14 @@ function updateEvent(auth) {
       eventId = items[items.length -1].id
 
       event = items[items.length -1]
-      event.start.dateTime = '2019-01-03T15:00:00.192Z',
-      event.end.dateTime = '2019-01-03T23:00:00.192Z',
-    
+
+      let today = new Date()
+      let todayOneHourAfter = new Date(today.getTime())
+      todayOneHourAfter.setHours(todayOneHourAfter.getHours() + 1)
+
+      event.start.dateTime = today,
+      event.end.dateTime = todayOneHourAfter,
+
       calendar.events.update({
         auth,
         calendarId,
