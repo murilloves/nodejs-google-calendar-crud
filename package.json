@@ -1,0 +1,19 @@
+{
+  "name": "calendar_integration",
+  "version": "1.0.0",
+  "description": "google calendar nectarcrm integration",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "google-calendar-nectar-crm-integration"
+  },
+  "author": "murillo",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "googleapis": "^27.0.0"
+  }
+}
