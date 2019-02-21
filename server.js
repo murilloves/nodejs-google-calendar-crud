@@ -110,7 +110,9 @@ function listEvents(auth, numberOfEvents = 15) {
         res.data.items.map((event, i) => {
           const start = event.start.dateTime || event.start.date;
           console.log(`${start.slice(0, 10)} at ${start.slice(11, 16)} - ${event.summary} -> eventID: ${event.id}`);
+
         });
+        printAuth(calendar)
       } else {
         console.log('No events found')
       }
@@ -130,31 +132,43 @@ function paramsEventsList(fromIsoDate, numberOfEvents) {
 }
 
 function getActionFromUser(auth) {
-  const numberOfListedEvents = 15
-  console.log(`1 - Lists your ${numberOfListedEvents} first Google calendar events`)
-  console.log('2 - Inserts new event for tomorrow')
-  console.log('3 - Update the first event to current day')
-  console.log('4 - Delete first event')
-  console.log('5 - Revoke your token')
+  const numberOfListedEvents = 100
+  console.log(`10 - Lists your ${numberOfListedEvents} first Google calendar events`)
+  // console.log(`11 - Lists your ${numberOfListedEvents} first Google calendar events from Today`)
+  console.log('20 - Inserts new event for tomorrow')
+  console.log('30 - Update the first event to current day')
+  console.log('40 - Delete first event')
+  console.log('41 - Delete first event from today')
+  console.log('90 - Print Auth')
+  console.log('666 - Revoke your token')
   console.log('\n0 - Exit')
   console.log('\n')
   console.log('Choose an action:')
 
   stdin.addListener("data", function(d) {
     switch(Number(d)) {
-      case 1:
+      case 10:
         listEvents(auth, numberOfListedEvents)
         break
-      case 2:
+      // case 11:
+      //   listEvents(auth, numberOfListedEvents)
+      //   break
+      case 20:
         createEvent(auth)
         break
-      case 3:
+      case 30:
         updateEvent(auth)
         break
-      case 4:
+      case 40:
         deleteFirstEvent(auth)
         break
-      case 5:
+      case 41:
+        deleteFirstEvent(auth, true)
+        break
+      case 90:
+        printAuth(auth)
+        break
+      case 666:
         revokeToken(auth)
         break
       case 0:
@@ -176,9 +190,17 @@ function getActionFromUser(auth) {
 //   )
 // }
 
-function deleteFirstEvent(auth) {
+function printAuth(calendar) {
+  // console.log('- Auth: ', auth)
+  // const calendar = getCalendar(auth)
+  console.log('\n\n\n')
+  console.log(calendar._options.auth.credentials.access_token)
+}
+
+function deleteFirstEvent(auth, fromToday) {
   const calendar = getCalendar(auth)
-  const isoDate = (new Date(1970, 1, 1)).toISOString()
+  let isoDate; 
+  fromToday ? isoDate = (new Date()).toISOString() : isoDate = (new Date(1970, 1, 1)).toISOString()
 
   calendar.events.list(
     paramsEventsList(isoDate, 1),
