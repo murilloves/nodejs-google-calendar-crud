@@ -112,7 +112,7 @@ function listEvents(auth, numberOfEvents = 15) {
           console.log(`${start.slice(0, 10)} at ${start.slice(11, 16)} - ${event.summary} -> eventID: ${event.id}`);
 
         });
-        printAuth(calendar)
+        // printAuth(calendar)
       } else {
         console.log('No events found')
       }
